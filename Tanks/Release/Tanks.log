@@ -1,0 +1,9 @@
+﻿  Enemy.cpp
+C:\Users\user\source\repos\Tanks\Tanks\Enemy.cpp(11,15): warning C4305: =: усечение из "double" в "float"
+C:\Users\user\source\repos\Tanks\Tanks\Enemy.cpp(16,21): warning C4018: <: несоответствие типов со знаком и без знака
+  Создание кода
+  4 of 219 functions ( 1.8%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    2 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  Tanks.vcxproj -> C:\Users\user\source\repos\Tanks\Release\Tanks.exe
