@@ -34,16 +34,21 @@ namespace tanks {
 		void CheckInterspect();
 		bool exit = false;
 	public:
+		int level;
 		static Result result;//исход игры
 		float time;
 		float speedShoot;
+		int sizeItem = 50;
 		static Game* Instance;//ссылка на объект
 		vector<GameObject*> gameObjects;//список всех игровых объектов, дл€ которых обновл€етс€ логика и провер€ютс€ столкновени€
 		vector<Timer*> timers;
-		int WindowWidth = 1000;
-		int WindowHeight = 650;
-		Game();
-		void CheckPlayerWin();
+		int WindowWidth = 1200;
+		int WindowHeight = 800;
+		Game(int level);
+		void SpawnEnemy(tanks::Timer* spawn, int* positions, int& indexPos, int& count);
+		void CreateLevel();
+		void CreateHead();
+		void CheckPlayerWin(int& count);
 		int playerLives = 3;
 		void Exit(Result res);//выход
 		void AddGameObject(GameObject* obj);//регистраци€ игрового объекта
@@ -71,6 +76,7 @@ namespace tanks {
 		Direction dir;
 
 		Tank(String path);
+		void ControlPosition(float& coordinate);
 		void Draw();
 		void Move();
 		void SetDir(Direction newDir);
@@ -83,6 +89,7 @@ namespace tanks {
 		void Control();
 		Timer* shootTimer;
 	public:
+		int lives = 3;
 		Player(float startX, float startY);
 		virtual void Update() override;
 		virtual void Interspect(GameObject* obj) override;

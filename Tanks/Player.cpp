@@ -19,18 +19,22 @@ namespace tanks {
 	{
 		if (Keyboard::isKeyPressed(Keyboard::W)) {
 			SetDir(up);
+			ControlPosition(x);
 			Move();
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::D)) {
 			SetDir(right);
+			ControlPosition(y);
 			Move();
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::S)) {
 			SetDir(down);
+			ControlPosition(x);
 			Move();
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::A)) {
 			SetDir(left);
+			ControlPosition(y);
 			Move();
 		}
 		if (shootTimer->IsTime()) {
@@ -48,7 +52,10 @@ namespace tanks {
 			ReverseMove();
 		}
 		if (obj->type == enemyFire) {
-			Game::Instance->Exit(lose);
+			lives -= 1;
+			if (lives == 0) {
+				Game::Instance->Exit(lose);
+			}
 		}
 	}
 }

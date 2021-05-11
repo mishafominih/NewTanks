@@ -25,6 +25,14 @@ namespace tanks {
 		}
 	}
 
+	void tanks::Tank::ControlPosition(float& coordinate)
+	{
+		int coord = coordinate - 25;
+		auto size = Game::Instance->sizeItem;
+		auto surplus = coord % size;
+		if (surplus > size / 2) coordinate = ((coord / size) + 1)* size + 25;
+		else coordinate = (coord / size)* size + 25;
+	}
 
 	void Tank::Move()
 	{

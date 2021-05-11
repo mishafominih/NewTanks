@@ -3,5 +3,12 @@
 using namespace tanks;
 
 int main() {
-	new Game();
+	setlocale(0, "");
+	int level = 0;
+	while (true) {
+		new Game(level++);
+		if (Game::result == lose) level--;
+		if (Game::result == win) continue;
+		if (Game::result == exite) break;
+	}
 }

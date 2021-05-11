@@ -8,7 +8,7 @@ namespace tanks {
 		sprite.setPosition(x, y);
 		FindObjectATtypeOf(player);
 		dir = up;
-		speed = 0.06;
+		speed = 0.06 + 0.4 * Game::Instance->level;
 	}
 
 	void Enemy::FindObjectATtypeOf(Type type)
@@ -33,10 +33,10 @@ namespace tanks {
 	void tanks::Enemy::logic()
 	{
 		Move();
-		if (rand() % 11000 == 333) {
+		if (rand() % 5000 - 1000 * Game::Instance->level == 333) {
 			Game::Instance->AddGameObject(new Fire(x, y, enemyFire, dir));
 		}
-		if (rand() % 400000 == 333) {
+		if (rand() % 400000 - 5000 * Game::Instance->level == 333) {
 			ChangeDir();
 		}
 	}
@@ -44,12 +44,14 @@ namespace tanks {
 	void Enemy::ChangeDir()
 	{
 		if (dir == up || dir == down) {
+			ControlPosition(x);
 			if(target->x > x)
 				rand() % 3 == 0 ? SetDir(left) : SetDir(right);
 			else
 				rand() % 3 == 0 ? SetDir(right) : SetDir(left);
 		}
 		else {
+			ControlPosition(y);
 			if(target->y > y)
 				rand() % 3 == 0 ? SetDir(up) : SetDir(down);
 			else

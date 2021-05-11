@@ -5,25 +5,31 @@
 #include <iostream>
 
 using namespace std;
+
 namespace tanks {
 
 	Game* Game::Instance;
 	Result Game::result;
 
-	Game::Game() {
+	Game::Game(int level) {
+		this->level = level;
+		if (level >= 4 || level < 0) {
+			Exit(exite);
+			cout << "Вы выиграли!!!" << endl;
+		}
 		Instance = this;
 		RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "Tanks");
 
-		AddGameObject(new Bricks(150, 200));
-		AddGameObject(new Wall(350, 150));
-		AddGameObject(new Player(100, 100));
-		AddGameObject(new Enemy(350, 500));
-		AddGameObject(new Bush(250, 200));
-		//AddGameObject(new Head(50, 50));
+		CreateLevel();
 
 		Clock clock;
 		srand(std::time(NULL));
 
+		Timer* spawn = new Timer(4);
+		AddTimer(spawn);
+		int count = 20;
+		int* positions = new int[3] { 75, WindowWidth / 2 - 25, WindowWidth - 25};
+		int indexPos = 0;
 		while (window.isOpen())//основной игровой цикл
 		{
 			time = clock.getElapsedTime().asSeconds();
@@ -38,6 +44,8 @@ namespace tanks {
 
 			CheckInterspect();//проверка столкновений
 
+			SpawnEnemy(spawn, positions, indexPos, count);
+
 			sf::Event event;
 			while (window.pollEvent(event))
 			{
@@ -47,7 +55,7 @@ namespace tanks {
 			}
 			window.clear();
 
-			//CheckPlayerWin();
+			CheckPlayerWin(count);
 
 			for (auto obj : gameObjects) {//отрисовка всех игровых объектов
 				window.draw(obj->sprite);
@@ -59,16 +67,113 @@ namespace tanks {
 		}
 	}
 
-	void Game::CheckPlayerWin()
+	void Game::SpawnEnemy(tanks::Timer* spawn, int* positions, int& indexPos, int& count)
 	{
-		int count = 0;
-		for (auto obj : gameObjects) {
-			if (obj->type == Type::enemy) {
-				count++;
+		if (spawn->IsTime()) {
+			if (count-- <= 0) return;
+			auto position = positions[indexPos++];
+			if (indexPos >= 3) indexPos = 0;
+			AddGameObject(new Enemy(position, 25));
+			spawn->Restart();
+		}
+	}
+
+	void Game::CreateLevel()
+	{
+		for (int i = 0; i < WindowWidth; i += 50) {
+			for (int j = 0; j < WindowHeight; j += 50) {
+				if(i % 100 == 0 && j % 100 == 0 && j < WindowHeight - 200)
+					AddGameObject(new Bricks(i, j));
+
 			}
 		}
-		if (count == 0)
-			Exit(win);
+		AddGameObject(new Bricks(WindowWidth - 100, WindowHeight - 100));
+		AddGameObject(new Bricks(WindowWidth - 50, WindowHeight - 100));
+		AddGameObject(new Bricks(WindowWidth - 100, WindowHeight - 50));
+		AddGameObject(new Bricks(WindowWidth - 50, WindowHeight - 50));
+		AddGameObject(new Bricks(WindowWidth - 50, WindowHeight - 150));
+
+		AddGameObject(new Bricks(200, WindowHeight - 200));
+		AddGameObject(new Bricks(200, WindowHeight - 150));
+		AddGameObject(new Bricks(200, WindowHeight - 100));
+		AddGameObject(new Bricks(200, WindowHeight - 50));
+
+
+		CreateHead();
+
+
+		AddGameObject(new Wall(50, 50));
+		AddGameObject(new Wall(50, 100));
+		AddGameObject(new Wall(50, 150));
+		AddGameObject(new Wall(100, 150));
+
+		AddGameObject(new Wall(500, 250));
+		AddGameObject(new Wall(550, 250));
+		AddGameObject(new Wall(600, 250));
+
+		AddGameObject(new Wall(950, 100));
+		AddGameObject(new Wall(950, 150));
+		AddGameObject(new Wall(950, 200));
+		AddGameObject(new Wall(950, 250));
+		AddGameObject(new Wall(950, 300));
+
+		AddGameObject(new Wall(50, 700));
+		AddGameObject(new Wall(550, 550));
+		AddGameObject(new Wall(650, 0));
+
+		AddGameObject(new Player(WindowWidth / 2 - 150, WindowHeight - 50));
+		//AddGameObject(new Enemy(350, 500));
+
+
+		AddGameObject(new Bush(WindowWidth / 2 + 300, WindowHeight - 150));
+		AddGameObject(new Bush(WindowWidth / 2 + 250, WindowHeight - 150));
+		AddGameObject(new Bush(WindowWidth / 2 + 200, WindowHeight - 150));
+		AddGameObject(new Bush(WindowWidth / 2 + 150, WindowHeight - 150));
+		AddGameObject(new Bush(WindowWidth / 2 + 100, WindowHeight - 150));
+		AddGameObject(new Bush(WindowWidth / 2 + 50, WindowHeight - 150));
+		AddGameObject(new Bush(WindowWidth / 2 + 300, WindowHeight - 100));
+		AddGameObject(new Bush(WindowWidth / 2 + 250, WindowHeight - 100));
+		AddGameObject(new Bush(WindowWidth / 2 + 200, WindowHeight - 100));
+		AddGameObject(new Bush(WindowWidth / 2 + 150, WindowHeight - 100));
+		AddGameObject(new Bush(WindowWidth / 2 + 100, WindowHeight - 100));
+		AddGameObject(new Bush(WindowWidth / 2 + 50, WindowHeight - 100));
+		AddGameObject(new Bush(WindowWidth / 2 + 300, WindowHeight - 50));
+		AddGameObject(new Bush(WindowWidth / 2 + 250, WindowHeight - 50));
+		AddGameObject(new Bush(WindowWidth / 2 + 200, WindowHeight - 50));
+		AddGameObject(new Bush(WindowWidth / 2 + 150, WindowHeight - 50));
+		AddGameObject(new Bush(WindowWidth / 2 + 100, WindowHeight - 50));
+		AddGameObject(new Bush(WindowWidth / 2 + 50, WindowHeight - 50));
+		for (int i = 0; i < WindowWidth; i += 50) {
+			for (int j = 0; j < WindowHeight; j += 50) {
+				if (i % 50 == 0 && i % 100 != 0 && j % 50 == 0 && j % 100 != 0 && j < WindowHeight - 200)
+					AddGameObject(new Bush(i, j));
+
+			}
+		}
+	}
+
+	void Game::CreateHead()
+	{
+		AddGameObject(new Bricks(WindowWidth / 2 - 100, WindowHeight - 100));
+		AddGameObject(new Bricks(WindowWidth / 2 - 50, WindowHeight - 100));
+		AddGameObject(new Bricks(WindowWidth / 2, WindowHeight - 100));
+		AddGameObject(new Bricks(WindowWidth / 2 - 100, WindowHeight - 50));
+		AddGameObject(new Head(WindowWidth / 2 - 50, WindowHeight - 50));
+		AddGameObject(new Bricks(WindowWidth / 2, WindowHeight - 50));
+	}
+
+	void Game::CheckPlayerWin(int& count)
+	{
+		if (count <= 0) {
+			int countObj = 0;
+			for (auto obj : gameObjects) {
+				if (obj->type == Type::enemy) {
+					countObj++;
+				}
+			}
+			if (countObj == 0)
+				Exit(win);
+		}
 	}
 
 	void Game::Exit(Result res)
