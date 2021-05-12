@@ -1,5 +1,5 @@
-#include "Game.h"
 #include "pch.h"
+#include "Game.h"
 
 namespace tanks {
 	Player::Player(float startX, float startY) : Tank("Player.png"){

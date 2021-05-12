@@ -1,5 +1,5 @@
-#include "Game.h"
 #include "pch.h"
+#include "Game.h"
 
 namespace tanks {
 	Enemy::Enemy(float startX, float startY) : Tank("Enemy.png") {
@@ -61,16 +61,16 @@ namespace tanks {
 	}
 
 	void Enemy::Interspect(GameObject* obj) {
-		if (obj->type == playerfire) {
-			Game::Instance->DelGameObject(obj);
-			Game::Instance->DelGameObject(this);
-		}
 		if (obj->type == player || obj->type == bricks || obj->type == wall || obj->type == head) {
 			ReverseMove();
 			if (changeDirTimer->IsTime()) {
 				ChangeDir();
 				changeDirTimer->Restart();
 			}
+		}
+		if (obj->type == playerfire) {
+			Game::Instance->DelGameObject(this);
+			Game::Instance->DelGameObject(obj);
 		}
 	}
 

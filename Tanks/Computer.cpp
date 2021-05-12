@@ -1,5 +1,5 @@
-#include "Game.h"
 #include "pch.h"
+#include "Game.h"
 
 namespace tanks {
 	Computer::Computer(int startX, int startY) :Player(startX, startY){
