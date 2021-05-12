@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "pch.h"
 
 namespace tanks {
 	Enemy::Enemy(float startX, float startY) : Tank("Enemy.png") {
@@ -8,7 +9,7 @@ namespace tanks {
 		sprite.setPosition(x, y);
 		FindObjectATtypeOf(player);
 		dir = up;
-		speed = 0.06 + 0.4 * Game::Instance->level;
+		speed = 0.06 + 0.04 * Game::Instance->level;
 	}
 
 	void Enemy::FindObjectATtypeOf(Type type)
@@ -33,7 +34,7 @@ namespace tanks {
 	void tanks::Enemy::logic()
 	{
 		Move();
-		if (rand() % 5000 - 1000 * Game::Instance->level == 333) {
+		if (rand() % 3500 - 1000 * Game::Instance->level == 333) {
 			Game::Instance->AddGameObject(new Fire(x, y, enemyFire, dir));
 		}
 		if (rand() % 400000 - 5000 * Game::Instance->level == 333) {

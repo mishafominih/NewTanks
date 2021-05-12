@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClCompile Include="Bricks.cpp" />
     <ClCompile Include="Bush.cpp" />
+    <ClCompile Include="Computer.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Fire.cpp" />
     <ClCompile Include="Game.cpp" />

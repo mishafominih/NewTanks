@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "pch.h"
 
 namespace tanks {
 	Player::Player(float startX, float startY) : Tank("Player.png"){
@@ -39,12 +40,16 @@ namespace tanks {
 		}
 		if (shootTimer->IsTime()) {
 			if (Keyboard::isKeyPressed(Keyboard::F)) {
-				Game::Instance->AddGameObject(
-					new Fire(x, y, playerfire, dir)
-				);
+				CreateFire();
 				shootTimer->Restart();
 			}
 		}
+	}
+
+	void Player::CreateFire()
+	{
+		auto fire = new Fire(x, y, playerfire, dir);
+		Game::Instance->AddGameObject(fire);
 	}
 
 	void Player::Interspect(GameObject* obj) {
@@ -56,6 +61,7 @@ namespace tanks {
 			if (lives == 0) {
 				Game::Instance->Exit(lose);
 			}
+			Game::Instance->DelGameObject(obj);
 		}
 	}
 }

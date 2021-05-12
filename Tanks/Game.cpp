@@ -11,7 +11,7 @@ namespace tanks {
 	Game* Game::Instance;
 	Result Game::result;
 
-	Game::Game(int level) {
+	Game::Game(int level, bool isPlayer) {
 		this->level = level;
 		if (level >= 4 || level < 0) {
 			Exit(exite);
@@ -20,7 +20,7 @@ namespace tanks {
 		Instance = this;
 		RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "Tanks");
 
-		CreateLevel();
+		CreateLevel(isPlayer);
 
 		Clock clock;
 		srand(std::time(NULL));
@@ -67,6 +67,10 @@ namespace tanks {
 		}
 	}
 
+	Game::Game()
+	{
+	}
+
 	void Game::SpawnEnemy(tanks::Timer* spawn, int* positions, int& indexPos, int& count)
 	{
 		if (spawn->IsTime()) {
@@ -78,7 +82,7 @@ namespace tanks {
 		}
 	}
 
-	void Game::CreateLevel()
+	void Game::CreateLevel(bool isPlayer)
 	{
 		for (int i = 0; i < WindowWidth; i += 50) {
 			for (int j = 0; j < WindowHeight; j += 50) {
@@ -121,8 +125,8 @@ namespace tanks {
 		AddGameObject(new Wall(550, 550));
 		AddGameObject(new Wall(650, 0));
 
-		AddGameObject(new Player(WindowWidth / 2 - 150, WindowHeight - 50));
-		//AddGameObject(new Enemy(350, 500));
+		if(isPlayer) AddGameObject(new Player(WindowWidth / 2 - 125, WindowHeight - 25));
+		else AddGameObject(new Computer(WindowWidth / 2 - 25, WindowHeight - 125));
 
 
 		AddGameObject(new Bush(WindowWidth / 2 + 300, WindowHeight - 150));

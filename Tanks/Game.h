@@ -44,12 +44,12 @@ namespace tanks {
 		vector<Timer*> timers;
 		int WindowWidth = 1200;
 		int WindowHeight = 800;
-		Game(int level);
+		Game(int level, bool isPlayer);
+		Game();
 		void SpawnEnemy(tanks::Timer* spawn, int* positions, int& indexPos, int& count);
-		void CreateLevel();
+		void CreateLevel(bool isPlayer);
 		void CreateHead();
 		void CheckPlayerWin(int& count);
-		int playerLives = 3;
 		void Exit(Result res);//выход
 		void AddGameObject(GameObject* obj);//регистрация игрового объекта
 		void DelGameObject(GameObject* obj);
@@ -85,8 +85,9 @@ namespace tanks {
 	};
 
 	class Player : public Tank {
-	private:
-		void Control();
+	protected:
+		virtual void Control();
+		void CreateFire();
 		Timer* shootTimer;
 	public:
 		int lives = 3;
@@ -96,9 +97,8 @@ namespace tanks {
 	};
 
 	class Fire : public GameObject {
-	private:
-		float speed = 0.3f;
 	public:
+		float speed = 0.3f;
 		Direction dir;
 		Fire(float startX, float startY, Type type, Direction dir);
 		virtual void Update() override;
@@ -109,7 +109,6 @@ namespace tanks {
 	private:
 	public:
 		Bricks(float startX, float startY);
-		//virtual void Update() override;
 		virtual void Interspect(GameObject* obj) override;
 	};
 	
@@ -117,7 +116,6 @@ namespace tanks {
 	private:
 	public:
 		Wall(float startX, float startY);
-		//virtual void Update() override;
 		virtual void Interspect(GameObject* obj) override;
 	};
 
@@ -125,7 +123,6 @@ namespace tanks {
 	private:
 	public:
 		Bush(float startX, float startY);
-		//virtual void Update() override;
 		virtual void Interspect(GameObject* obj) override;
 	};
 
@@ -133,7 +130,6 @@ namespace tanks {
 	private:
 	public:
 		Head(float startX, float startY);
-		//virtual void Update() override;
 		virtual void Interspect(GameObject* obj) override;
 	};
 
@@ -150,6 +146,15 @@ namespace tanks {
 		virtual void Update() override;
 		virtual void Interspect(GameObject* obj) override;
 		virtual void End() override;
+	};
+
+	class Computer : public Player{
+	protected:
+		Timer* rightTimer = new Timer(0.3);
+		Timer* leftTimer = new Timer(0.3);
+		virtual void Control() override;
+	public:
+		Computer(int startX, int startY);
 	};
 }
 #endif

@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "pch.h"
 
 namespace tanks {
 	Tank::Tank(String path) : GameObject(path) {
