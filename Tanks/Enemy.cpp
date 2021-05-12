@@ -34,7 +34,7 @@ namespace tanks {
 	void tanks::Enemy::logic()
 	{
 		Move();
-		if (rand() % 3500 - 1000 * Game::Instance->level == 333) {
+		if (rand() % 2000 - 500 * Game::Instance->level == 21) {
 			Game::Instance->AddGameObject(new Fire(x, y, enemyFire, dir));
 		}
 		if (rand() % 400000 - 5000 * Game::Instance->level == 333) {
